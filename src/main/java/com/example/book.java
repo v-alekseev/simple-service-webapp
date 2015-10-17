@@ -2,26 +2,24 @@ package com.example;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * Created by Vitalik on 17.10.2015.
- */
-
 
 @XmlRootElement
 public class book {
 
 
-    public String name;
-    public String author;
-    public int create_year;
+    public String Name;
+    public String Author;
+    public int CreateYear;
 
     public book() {} // JAXB needs this
 
     public book(String name,String author, int year) {
-        this.name = name;
-        this.author = author;
-        this.create_year = year;
+        this.Name = name;
+        this.Author = author;
+        this.CreateYear = year;
     }
+
+
 }
 
 
