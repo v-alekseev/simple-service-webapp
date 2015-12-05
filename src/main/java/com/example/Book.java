@@ -4,32 +4,55 @@ package com.example;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-@XmlRootElement
 public class Book {
 
 
-    public int id;
-    public String Name;
-    public String Author;
-    public int CreateYear;
+    private Long bookId;
+    private String name;
+    private Integer year;
 
     public Book() {} // JAXB needs this
 
-    public Book(String name, String author, int year) {
-        fillbook(0, name, author, year);
+    public Book(String name, int year) {
+        fillbook(new Long(0), name, year);
     }
-    public Book(int ID, String name, String author, int year) {
-        fillbook(ID, name, author, year);
+    public Book(Long ID, String name, int year) {
+        fillbook(ID, name, year);
     }
-    public void fillbook(int ID, String name, String author, int year) {
-        this.id =ID;
-        this.Name = name;
-        this.Author = author;
-        this.CreateYear = year;
+    public void fillbook(Long ID, String name, int year) {
+        this.bookId =ID;
+        this.name = name;
+        this.year = year;
     }
 
+    public Long getBookId() {
+        return bookId;
+    }
 
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    @Override
+    public String toString(){
+        return "Book name - " + name + "; issue year - " +  year + "; id = " + bookId;
+    }
 }
 
 

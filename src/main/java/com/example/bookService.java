@@ -5,15 +5,20 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import org.glassfish.jersey.server.JSONP;
+import org.hibernate.Session;
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.service.ServiceRegistryBuilder;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
-import java.util.List;
 
+import java.util.List;
 import java.util.Map;
 import java.util.logging.*;
 
@@ -26,19 +31,25 @@ public class bookService {
    // private static List<Book> list = new ArrayList<Book>();
     private static Map<Integer, Book> listBooks = new HashMap<Integer, Book>();
     private static Logger logger = Logger.getLogger("com.wombat.nose");
+    private static HibernateUtil hibernateUtil = new HibernateUtil();
 
     public bookService(){
-        logger.log(Level.INFO, "bookService()");
+        logger.log(Level.INFO, "!!!!!!!!!!!11 bookService()");
         if(isInit == false){
-            testBook = new Book("War and peace","Tolstoy L.N.", 1820);
+            testBook = new Book("War and peace", 1820);
  //           list.add( new Book("War and peace","Tolstoy L.N.", 1820));
 //            list.add( new Book("Monday start in Saturday","Strugatskiy brothers", 1960));
 //            list.add( new Book("HarryPotter","Unknown", 1990));
 
         //  listBooks.put(1, new Book("War and peace","Tolstoy L.N.", 1820);
-            addBook(new Book("War and peace","Tolstoy L.N.", 1820));
-            addBook(new Book("Monday start in Saturday","Strugatskiy brothers", 1960));
-            addBook(new Book("HarryPotter","Unknown", 1990));
+    //        addBook(new Book("War and peace", 1820));
+      //      addBook(new Book("Monday start in Saturday",1960));
+        //    addBook(new Book("HarryPotter", 1990));
+
+   //         Session session = HibernateUtil.getCurrentSession();
+     //       List<Book> list = session.createQuery("from Book order by CreateYear").list();
+
+            hibernateUtil.initConfig();
 
             isInit = true;
             }
@@ -50,7 +61,19 @@ public class bookService {
     {
         Gson gson = new Gson();
         //return  gson.toJson(list);
-        return  gson.toJson(listBooks.values());
+
+
+        // 3. Get Session object
+       // Session session = sessionFactory.openSession();
+        Session session = hibernateUtil.getCurrentSession();
+
+
+        List<Book> result = session.createQuery("from Book order by year").list();
+
+      //  session.getTransaction().commit();
+
+//        return  gson.toJson(listBooks.values());
+        return  gson.toJson(result);
     }
     @GET
     @Path("{ID}")
@@ -83,9 +106,9 @@ public class bookService {
             //list.add(new Book(name, author, year));
             if(listBooks.containsKey(ID)){
  //               listBooks.replace(ID,new Book(name, author, year) );
-                listBooks.replace(ID,new Book(ID,name, author, year) );
+                listBooks.replace(ID,new Book(new Long(ID),name, year) );
             }else{
-                addBook(new Book(name, author, year));
+                addBook(new Book(name, year));
             }
             response = getResponce(true).toString();
         }catch (Exception ex){
@@ -181,7 +204,7 @@ public class bookService {
 
 
     private void addBook(Book newBook){
-        int maxId=0;
+      /*  Long maxId = new Long(0);
         for(Book book : listBooks.values()){
              if(book.id >maxId){
                  maxId = book.id;
@@ -190,7 +213,8 @@ public class bookService {
 
         maxId++;
         newBook.id = maxId;
-        listBooks.put(maxId, newBook);
+        listBooks.put(maxId.intValue(), newBook);
+        */
     }
 }
 

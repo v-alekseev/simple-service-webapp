@@ -1,6 +1,7 @@
 <html>
 <body>
     <h2>Test Book REST Api</h2>
+    <p>22
     <p><a href="webapi/book">Return all book (webapi/book)</a>
     <p><a href="webapi/book/1">Return fitst book ("webapi/book/1)</a>
     <p><form action="webapi/book/" method="get">
